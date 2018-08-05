@@ -736,6 +736,8 @@ def storageTest(name,num):
                                     ,'thumbnail9': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + objectFirebese + num + '_9.jpg' + '?alt=media'
                                     ,'thumbnail10': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + objectFirebese + num + '_10.jpg' + '?alt=media'})
 
+###################################updateFirebase#########################################
+
 
 def update():
     #############pictureupdate###########
@@ -743,7 +745,7 @@ def update():
     from firebase import firebase
     from google.cloud import storage
     client = storage.Client.from_service_account_json(
-        'C:\Users\MOJI\Desktop\project\dogwood-terra-184417-firebase-adminsdk-vy9o9-765ac92f9f.json')
+        '/home/kns/PycharmProjects/Aj/AJ2/dogwood-terra-184417-firebase-adminsdk-vy9o9-765ac92f9f.json')
     bucket = client.get_bucket('dogwood-terra-184417.appspot.com')
     firebase = firebase.FirebaseApplication('https://dogwood-terra-184417.firebaseio.com/', None)
     import requests
@@ -756,7 +758,7 @@ def update():
             print ('Error: Creating directory. ' + directory)
 
     import sqlite3
-    conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+    conn = sqlite3.connect('Test_PJ2.db')
     cursor = conn.execute("SELECT ID,Name,day,month,year,hour,minute from call_Detect")
     result = firebase.get('/object/data/', None)
     n = []
@@ -922,14 +924,14 @@ def update():
                                     sameYear[count1]) + ',' + str(sameHour[count1]) + ',' + str(sameMinute[count1])})
                         elif (f == 1):
                             print 'f'
-                            conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+                            conn = sqlite3.connect('Test_PJ2.db')
                             conn.execute("DELETE from call_Detect where ID = " + str(id2[count1]) + ";")
                             conn.commit()
-                            with sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                            with sqlite3.connect('Test_PJ2.db') as con:
                                 cur3 = con.cursor()
                                 cur3.execute('insert into call_Detect values (?,?,?,?,?,?,?,?)', (
-                                id2[count1], name, 1, int(listdate[0]), int(listdate[1]), int(listdate[2]),
-                                int(listdate[3]), int(listdate[4])))
+                                    id2[count1], name, 1, int(listdate[0]), int(listdate[1]), int(listdate[2]),
+                                    int(listdate[3]), int(listdate[4])))
                             for k in range(lnre):
                                 print k
                                 if (k == 0):
@@ -959,10 +961,10 @@ def update():
                     if (name == nobcheck[count]):
                         print name, Maxid, int(listdate[0]), int(listdate[1]), int(listdate[2]), int(listdate[3]), int(
                             listdate[4])
-                        with sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                        with sqlite3.connect('Test_PJ2.db') as con:
                             cur3 = con.cursor()
-                            cur3.execute('insert into call_Detect values (?,?,?,?,?,?,?,?)', (
-                            Maxid, name, 1, int(listdate[0]), int(listdate[1]), int(listdate[2]), int(listdate[3]),
+                            cur3.execute('insert into call_Detect values (?,?,?,?,?,?,?,?,?)', (
+                            Maxid, name, 1, 1, int(listdate[0]), int(listdate[1]), int(listdate[2]), int(listdate[3]),
                             int(listdate[4])))
                         # print lnre
                         for k in range(lnre):
@@ -974,15 +976,16 @@ def update():
                                 url = firebase.get('/object/data/' + i, 'thumbnail' + str(k + 1))
                                 print url
                             r = requests.get(url)
-                            folder = createFolder('C:\Users\MOJI\Downloads./' + name + '/')
-                            with open('C:\\Users\\MOJI\\Downloads\\' + name + '\\' + name + str(k + 1) + '_1' + '.jpg',
+                            folder = createFolder('/home/kns/PycharmProjects/Aj/AJ2/pic/' + name + '/')
+                            with open('/home/kns/PycharmProjects/Aj/AJ2/pic/' + name + '/' + name + str(
+                                    k + 1) + '_1' + '.jpg',
                                       'wb') as f:
                                 f.write(r.content)
         count += 1
         Maxid += 1
 
-    cursor = conn.execute("SELECT ID, Name,K,day,month,year,hour,minute from call_Detect")
     for j in range(ln2):
+        cursor = conn.execute("SELECT ID, Name,K,day,month,year,hour,minute from call_Detect")
         for row in cursor:
             if (count2 < ln2):
                 if (row[1] == nobcheck2[count2]):
@@ -993,50 +996,60 @@ def update():
                     hour = row[6]
                     minute = row[7]
                     print day, month, year, hour, minute
-                    fileaddress = ("C:\Users\MOJI\Pictures\\") + str(row[1])
+                    fileaddress = ("/home/kns/PycharmProjects/Aj/AJ2/pic/") + str(row[1])
                     print fileaddress
-                    filename1 = str(row[1]) + '1.jpg'
-                    blob1 = bucket.blob(str(row[1]) + '1.jpg')
-                    blob1.upload_from_filename(filename=fileaddress + "\\" + filename1)
-                    filename2 = str(row[1]) + '2.jpg'
-                    blob2 = bucket.blob(str(row[1]) + '2.jpg')
-                    blob2.upload_from_filename(filename=fileaddress + "\\" + filename2)
-                    filename3 = str(row[1]) + '3.jpg'
-                    blob3 = bucket.blob(str(row[1]) + '3.jpg')
-                    blob3.upload_from_filename(filename=fileaddress + "\\" + filename3)
-                    filename4 = str(row[1]) + '4.jpg'
-                    blob4 = bucket.blob(str(row[1]) + '4.jpg')
-                    blob4.upload_from_filename(filename=fileaddress + "\\" + filename4)
-                    filename5 = str(row[1]) + '5.jpg'
-                    blob5 = bucket.blob(str(row[1]) + '5.jpg')
-                    blob5.upload_from_filename(filename=fileaddress + "\\" + filename5)
-                    filename6 = str(row[1]) + '6.jpg'
-                    blob6 = bucket.blob(str(row[1]) + '6.jpg')
-                    blob6.upload_from_filename(filename=fileaddress + "\\" + filename6)
-                    filename7 = str(row[1]) + '7.jpg'
-                    blob7 = bucket.blob(str(row[1]) + '7.jpg')
-                    blob7.upload_from_filename(filename=fileaddress + "\\" + filename7)
-                    filename8 = str(row[1]) + '8.jpg'
-                    blob8 = bucket.blob(str(row[1]) + '8.jpg')
-                    blob8.upload_from_filename(filename=fileaddress + "\\" + filename8)
-                    filename9 = str(row[1]) + '9.jpg'
-                    blob9 = bucket.blob(str(row[1]) + '9.jpg')
-                    blob9.upload_from_filename(filename=fileaddress + "\\" + filename9)
-                    filename10 = str(row[1]) + '10.jpg'
-                    blob10 = bucket.blob(str(row[1]) + '10.jpg')
-                    blob10.upload_from_filename(filename=fileaddress + "\\" + filename10)
+                    filename1 = str(row[1]) + '1_1.jpg'
+                    blob1 = bucket.blob(str(row[1]) + '1_1.jpg')
+                    print blob1
+                    blob1.upload_from_filename(filename=fileaddress + "/" + filename1)
+                    filename2 = str(row[1]) + '1_2.jpg'
+                    blob2 = bucket.blob(str(row[1]) + '1_2.jpg')
+                    blob2.upload_from_filename(filename=fileaddress + "/" + filename2)
+                    filename3 = str(row[1]) + '1_3.jpg'
+                    blob3 = bucket.blob(str(row[1]) + '1_3.jpg')
+                    blob3.upload_from_filename(filename=fileaddress + "/" + filename3)
+                    filename4 = str(row[1]) + '1_4.jpg'
+                    blob4 = bucket.blob(str(row[1]) + '1_4.jpg')
+                    blob4.upload_from_filename(filename=fileaddress + "/" + filename4)
+                    filename5 = str(row[1]) + '1_5.jpg'
+                    blob5 = bucket.blob(str(row[1]) + '1_5.jpg')
+                    blob5.upload_from_filename(filename=fileaddress + "/" + filename5)
+                    filename6 = str(row[1]) + '1_6.jpg'
+                    blob6 = bucket.blob(str(row[1]) + '1_6.jpg')
+                    blob6.upload_from_filename(filename=fileaddress + "/" + filename6)
+                    filename7 = str(row[1]) + '1_7.jpg'
+                    blob7 = bucket.blob(str(row[1]) + '1_7.jpg')
+                    blob7.upload_from_filename(filename=fileaddress + "/" + filename7)
+                    filename8 = str(row[1]) + '1_8.jpg'
+                    blob8 = bucket.blob(str(row[1]) + '1_8.jpg')
+                    blob8.upload_from_filename(filename=fileaddress + "/" + filename8)
+                    filename9 = str(row[1]) + '1_9.jpg'
+                    blob9 = bucket.blob(str(row[1]) + '1_9.jpg')
+                    blob9.upload_from_filename(filename=fileaddress + "/" + filename9)
+                    filename10 = str(row[1]) + '1_10.jpg'
+                    blob10 = bucket.blob(str(row[1]) + '1_10.jpg')
+                    blob10.upload_from_filename(filename=fileaddress + "/" + filename10)
                     firebase.post('/object/data', {'object_Name': str(row[1]),
                                                    'thumbnail': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename1 + '?alt=media'
-                                                    ,'thumbnail2': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename2 + '?alt=media'
-                                                    ,'thumbnail3': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename3 + '?alt=media'
-                                                    ,'thumbnail4': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename4 + '?alt=media'
-                                                    ,'thumbnail5': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename5 + '?alt=media'
-                                                    ,'thumbnail6': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename6 + '?alt=media'
-                                                    ,'thumbnail7': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename7 + '?alt=media'
-                                                    ,'thumbnail8': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename8 + '?alt=media'
-                                                    ,'thumbnail9': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename9 + '?alt=media'
-                                                    ,'thumbnail10': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename10 + '?alt=media'
-                                                    ,'date': str(day) + ',' + str(month) + ',' + str(year) + ',' + str(hour) + ',' + str(minute)})
+                        ,
+                                                   'thumbnail2': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename2 + '?alt=media'
+                        ,
+                                                   'thumbnail3': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename3 + '?alt=media'
+                        ,
+                                                   'thumbnail4': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename4 + '?alt=media'
+                        ,
+                                                   'thumbnail5': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename5 + '?alt=media'
+                        ,
+                                                   'thumbnail6': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename6 + '?alt=media'
+                        ,
+                                                   'thumbnail7': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename7 + '?alt=media'
+                        ,
+                                                   'thumbnail8': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename8 + '?alt=media'
+                        ,
+                                                   'thumbnail9': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename9 + '?alt=media'
+                        ,
+                                                   'thumbnail10': 'https://firebasestorage.googleapis.com/v0/b/dogwood-terra-184417.appspot.com/o/' + filename10 + '?alt=media'
+                        , 'date': str(day) + ',' + str(month) + ',' + str(year) + ',' + str(hour) + ',' + str(minute)})
         count2 += 1
     cursor.close()
 
@@ -1045,11 +1058,11 @@ def update():
     from firebase import firebase
     from google.cloud import storage
     client = storage.Client.from_service_account_json(
-        'C:\Users\MOJI\Desktop\project\dogwood-terra-184417-firebase-adminsdk-vy9o9-765ac92f9f.json')
+        '/home/kns/PycharmProjects/Aj/AJ2/dogwood-terra-184417-firebase-adminsdk-vy9o9-765ac92f9f.json')
     bucket = client.get_bucket('dogwood-terra-184417.appspot.com')
     firebase = firebase.FirebaseApplication('https://dogwood-terra-184417.firebaseio.com/', None)
     import sqlite3
-    conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+    conn = sqlite3.connect('Test_PJ2.db')
     cursor = conn.execute("SELECT ID,Name,day,month,year,hour,minute from ActionName")
     result = firebase.get('/action/data/', None)
     nM = []
@@ -1074,7 +1087,7 @@ def update():
     cursor.close()
 
     # print NaM
-    # print sameY
+
     for i in result:
         name = firebase.get('/action/data/' + i, 'action_name')
         nM.append(name)
@@ -1092,7 +1105,7 @@ def update():
     nMocheck2 = set(NaM).difference(nM)
     nMocheck2 = list(nMocheck2)
     ln4 = len(nMocheck2)
-    # print ln4,nMocheck2
+    print ln4, nMocheck2
     ln5 = len(NaM)
     count3 = 0
     count4 = 0
@@ -1179,26 +1192,28 @@ def update():
                             cursor3.close()
                         elif (step == f):
                             print name, "aaaa", step, 'bbb', id1[count5]
-                            conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+                            conn = sqlite3.connect('Test_PJ2.db')
                             conn.execute("DELETE from ActionName where ID = " + str(id1[count5]) + ";")
                             conn.commit()
-                            conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+                            conn = sqlite3.connect('Test_PJ2.db')
                             conn.execute("DELETE from Action_Robot where ID = " + str(id1[count5]) + ";")
                             conn.commit()
                             if (str(step) == '1'):
                                 with sqlite3.connect(
-                                        'C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                                        'Test_PJ2.db') as con:
                                     cur3 = con.cursor()
                                     cur3.execute('insert into ActionName values (?,?,?,?,?,?,?)', (
-                                    int(id1[count5]), str(name), int(listdate[0]), int(listdate[1]), int(listdate[2]),
-                                    int(listdate[3]), int(listdate[4])))
+                                        int(id1[count5]), str(name), int(listdate[0]), int(listdate[1]),
+                                        int(listdate[2]),
+                                        int(listdate[3]), int(listdate[4])))
 
-                            with sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                            with sqlite3.connect('Test_PJ2.db') as con:
                                 cur4 = con.cursor()
                                 cur4.execute('insert into Action_Robot values (?,?,?,?,?,?,?,?,?,?)', (
-                                int(id1[count5]), int(step), int(listmotor[0]), int(listmotor[1]), int(listmotor[2]),
-                                int(listmotor[3]), int(listmotor[4]), int(listmotor[5]), int(listmotor[6]),
-                                int(listmotor[7])))
+                                    int(id1[count5]), int(step), int(listmotor[0]), int(listmotor[1]),
+                                    int(listmotor[2]),
+                                    int(listmotor[3]), int(listmotor[4]), int(listmotor[5]), int(listmotor[6]),
+                                    int(listmotor[7])))
         count5 += 1
 
     result = firebase.get('/action/data/', None)
@@ -1220,25 +1235,28 @@ def update():
                     if (name == nMocheck[count3]):
                         print name, listdate, count3, maxid
                         if (str(step) == '1'):
-                            with sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                            with sqlite3.connect('Test_PJ2.db') as con:
                                 cur3 = con.cursor()
                                 cur3.execute('insert into ActionName values (?,?,?,?,?,?,?)', (
-                                maxid, str(name), int(listdate[0]), int(listdate[1]), int(listdate[2]),
-                                int(listdate[3]), int(listdate[4])))
+                                    maxid, str(name), int(listdate[0]), int(listdate[1]), int(listdate[2]),
+                                    int(listdate[3]), int(listdate[4])))
 
-                        with sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db') as con:
+                        with sqlite3.connect('Test_PJ2.db') as con:
                             cur4 = con.cursor()
                             cur4.execute('insert into Action_Robot values (?,?,?,?,?,?,?,?,?,?)', (
-                            maxid, int(step), int(listmotor[0]), int(listmotor[1]), int(listmotor[2]),
-                            int(listmotor[3]), int(listmotor[4]), int(listmotor[5]), int(listmotor[6]),
-                            int(listmotor[7])))
+                                maxid, int(step), int(listmotor[0]), int(listmotor[1]), int(listmotor[2]),
+                                int(listmotor[3]), int(listmotor[4]), int(listmotor[5]), int(listmotor[6]),
+                                int(listmotor[7])))
         count3 += 1
         maxid + 1
 
-    cursor = conn.execute("SELECT ID, Name,Day,Month,Year,Hour,Minute from ActionName")
     for j in range(ln4):
+        cursor = conn.execute("SELECT ID, Name,Day,Month,Year,Hour,Minute from ActionName")
         for row in cursor:
             if (count4 < ln4):
+                print row[1], "jiiiii"
+                print nMocheck2[count4]
+                print count4
                 if (row[1] == nMocheck2[count4]):
                     print row[1]
                     day = row[2]
@@ -1261,17 +1279,20 @@ def update():
                     cursor2.close()
         count4 += 1
     cursor.close()
+
     result2 = firebase.get('/updatecheck/data/', None)
     if result2 != None:
         result2 = firebase.delete('/updatecheck/data/', None)
     firebase.post('/updatecheck/data', {'check': "information match"})
     firebase.post('/robotsend/data', {'textrobot': "Update completed."})
+    print "update Success"
+
 
 def checkupdate():
     from firebase import firebase
     import sqlite3
     firebase = firebase.FirebaseApplication('https://dogwood-terra-184417.firebaseio.com/', None)
-    conn = sqlite3.connect('C:\Users\MOJI\Desktop\project\Firebase\python\Test_PJ2.db')
+    conn = sqlite3.connect('Test_PJ2.db')
     cursor = conn.execute("SELECT ID,Name,day,month,year,hour,minute from ActionName")
     result = firebase.get('/action/data/', None)
     result1 = firebase.get('/object/data/', None)
@@ -1282,33 +1303,43 @@ def checkupdate():
     for row in cursor:
         NaM.append(row[1])
     cursor.close()
-    for i in result:
-        name = firebase.get('/action/data/' + i, 'action_name')
-        nM.append(name)
-    nMocheck = set(nM).difference(NaM)
-    nMocheck = list(nMocheck)
-    ln3 = len(nMocheck)
-    nMocheck2 = set(NaM).difference(nM)
-    nMocheck2 = list(nMocheck2)
-    ln4 = len(nMocheck2)
+
+    if (result != None):
+        for i in result:
+            name = firebase.get('/action/data/' + i, 'action_name')
+            nM.append(name)
+        nMocheck = set(nM).difference(NaM)
+        nMocheck = list(nMocheck)
+        ln3 = len(nMocheck)
+        nMocheck2 = set(NaM).difference(nM)
+        nMocheck2 = list(nMocheck2)
+        ln4 = len(nMocheck2)
+    else:
+        ln3 = 1
+        ln4 = 1
+
     cursor = conn.execute("SELECT ID,Name,day,month,year,hour,minute from call_Detect")
     for row in cursor:
         Na.append(row[1])
     cursor.close()
 
-    for i in result1:
-        name = firebase.get('/object/data/' + i, 'object_Name')
-        n.append(name)
+    if (result1 != None):
+        for i in result1:
+            name = firebase.get('/object/data/' + i, 'object_Name')
+            n.append(name)
+        nobcheck = set(n).difference(Na)
+        nobcheck = list(nobcheck)
+        ln = len(nobcheck)
+        nobcheck2 = set(Na).difference(n)
+        nobcheck2 = list(nobcheck2)
+        ln2 = len(nobcheck2)
+    else:
+        ln = 1
+        ln2 = 1
 
-    nobcheck = set(n).difference(Na)
-    nobcheck = list(nobcheck)
-    ln = len(nobcheck)
-    nobcheck2 = set(Na).difference(n)
-    nobcheck2 = list(nobcheck2)
-    ln2 = len(nobcheck2)
     picture = ln3 + ln4
     motor = ln + ln2
-    # print motor,picture
+    print motor, picture
     if (motor != 0 and picture != 0):
         result2 = firebase.get('/updatecheck/data/', None)
         if result2 != None:
@@ -1329,7 +1360,8 @@ def checkupdate():
         result2 = firebase.get('/updatecheck/data/', None)
         if result2 != None:
             result2 = firebase.delete('/updatecheck/data/', None)
-    firebase.post('/updatecheck/data', {'check': "information match"})
+        firebase.post('/updatecheck/data', {'check': "information match"})
+
 
 ##############################################################################################################
 ##############################################################################################################
